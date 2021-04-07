@@ -1,6 +1,8 @@
 <?php
 
-class control
+namespace Controllers;
+
+class Controller
 {
     public function test()
     {

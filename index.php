@@ -3,14 +3,19 @@
 $req_uri = $_SERVER['REQUEST_URI'];
 $parts = explode('/', ltrim($req_uri, '/'));
 
-if (file_exists("Controllers/" . $parts[0] . ".php")) {
-    require "Controllers/" . $parts[0] . ".php";
-    if (class_exists($parts[0])) {
-        $class = $parts[0];
+$cntrl_class = ucfirst($parts[0]);
+
+if (file_exists("Controllers/" . $cntrl_class . ".php")) {
+    spl_autoload_register(function ($class_name) {
+        include(str_replace("\\", "/", $class_name) . ".php");
+    });
+    $cntrl_class = "Controllers\\" . $cntrl_class;
+    if (class_exists($cntrl_class)) {
+        $class = $cntrl_class;
         $class_obj = new $class;
         $method = $parts[1];
         if (method_exists($class_obj, $method)) {
-            $control_obj->$method();
+            $cntrl_obj->$method();
         } else {
             echo "Not found";
         }
@@ -20,3 +25,11 @@ if (file_exists("Controllers/" . $parts[0] . ".php")) {
 } else {
     echo 'Not found';
 }
+
+// function __autoload($class_name)
+// {
+//     //avtomat ashxatum a class not foundi jamanak
+//     echo $class_name;
+// };
+
+// new B;
