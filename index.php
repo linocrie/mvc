@@ -25,11 +25,3 @@ if (file_exists("Controllers/" . $cntrl_class . ".php")) {
 } else {
     echo 'Not found';
 }
-
-// function __autoload($class_name)
-// {
-//     //avtomat ashxatum a class not foundi jamanak
-//     echo $class_name;
-// };
-
-// new B;
