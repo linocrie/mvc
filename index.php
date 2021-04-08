@@ -5,9 +5,9 @@ $parts = explode('/', ltrim($req_uri, '/'));
 
 $cntrl_class = ucfirst($parts[0]);
 
-if (file_exists("Controllers/" . $cntrl_class . ".php")) {
+if (file_exists("Controllers/" . DIRECTORY_SEPARATOR . $cntrl_class . ".php")) {
     spl_autoload_register(function ($class_name) {
-        include(str_replace("\\", "/", $class_name) . ".php");
+        include DIRECTORY_SEPARATOR . $class_name . ".php";
     });
     $cntrl_class = "Controllers\\" . $cntrl_class;
     if (class_exists($cntrl_class)) {

@@ -1,5 +1,5 @@
 <?php
 
 spl_autoload_register(function ($class_name) {
-    include(str_replace("\\", "/", $class_name) . ".php");
+    include DIRECTORY_SEPARATOR . $class_name . ".php";
 });
