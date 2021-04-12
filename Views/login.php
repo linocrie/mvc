@@ -11,7 +11,7 @@
                 <input type="password" class="form-control" name = "password">
             </div>
             <div class = "d-flex justify-content-center">
-                <button type="submit" class="btn btn-secondary mt-3">Login</button>
+                <button type="submit" class="btn btn-primary mt-3">Login</button>
             </div>
         </form>
     </div>
