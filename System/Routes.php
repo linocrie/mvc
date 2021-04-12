@@ -1,40 +1,39 @@
 <?php
+    namespace System;
 
-namespace System;
-
-class Routes
+    class Routes
 {
     function __construct($path)
     {
         if (!empty($path[0])) {
-            $cntrl_class = ucfirst($path[0]);
-            if (file_exists("Controllers" . DIRECTORY_SEPARATOR . $cntrl_class . ".php")) {
-                $cntrl_class = "Controllers\\" . $cntrl_class;
-                if (class_exists($cntrl_class)) {
-                    $cntrl_obj = new $cntrl_class;
-                    if (!empty($path[1])) {
-                        $method = $path[1];
-                        if (method_exists($cntrl_obj, $method)) {
-                            $params = array_slice($path, 2);
-                            call_user_func_array(array($cntrl_obj, $method), $params);
-                        } else {
-                            echo "404 ERROR";
-                        }
+            $ctrl_class = ucfirst($path[0]);
+        } else {
+            $ctrl_class = "Home";
+        }
+        if (file_exists("Controllers" . DIRECTORY_SEPARATOR . $ctrl_class . ".php")) {
+            $ctrl_class = "Controllers\\" . $ctrl_class;
+            if (class_exists($ctrl_class)) {
+                $ctrl_obj = new $ctrl_class;
+                if (!empty($path[1])) {
+                    $method = $path[1];
+                    if (method_exists($ctrl_obj, $method)) {
+                        $params = array_slice($path, 2);
+                        call_user_func_array(array($ctrl_obj, $method), $params);
                     } else {
-                        if (method_exists($cntrl_obj, "index")) {
-                            $cntrl_obj->index();
-                        } else {
-                            echo "Method not found";
-                        }
+                        echo "404 ERROR";
                     }
                 } else {
-                    echo "ERROR 404";
+                    if (method_exists($ctrl_obj, "index")) {
+                        $ctrl_obj->index();
+                    } else {
+                        echo "Method not found";
+                    }
                 }
             } else {
-                echo 'ERROR 404';
+                echo "ERROR 404";
             }
         } else {
-            //idk
+            echo "File doesn't exist";
         }
     }
 }

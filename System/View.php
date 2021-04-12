@@ -1,0 +1,29 @@
+<?php
+
+namespace System;
+class View
+{
+    public function render ($file_name, $layout = false) {
+        if(file_exists("Views" . DIRECTORY_SEPARATOR . $file_name.".php")){
+            if(!$layout) {
+                include 'Views' . DIRECTORY_SEPARATOR . $file_name.'.php';
+//                echo "Layouts doesn't exist";
+            }
+            else{
+                if(file_exists('Views' . DIRECTORY_SEPARATOR . 'layout'. DIRECTORY_SEPARATOR . 'header.php') && file_exists('Views' . DIRECTORY_SEPARATOR . 'layout'. DIRECTORY_SEPARATOR . 'footer.php')){
+                    include 'Views' . DIRECTORY_SEPARATOR . 'layout'. DIRECTORY_SEPARATOR . 'header.php';
+                    include 'Views' . DIRECTORY_SEPARATOR . $file_name.'.php';
+                    include 'Views' . DIRECTORY_SEPARATOR . 'layout'. DIRECTORY_SEPARATOR . 'footer.php';
+                }
+                else{
+                    echo "Header and footer doesn't exist";
+                }
+            }
+        }
+        else{
+            echo "$file_name doesn't exist ";
+        }
+
+    }
+
+}
