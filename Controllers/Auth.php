@@ -9,18 +9,35 @@ class Auth extends Controller {
     }
 
     public function register() {
-        if (!$_POST) {
-            $this->view->render("register", true);
-        } else {
-            print_r($_POST);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if(empty($_POST['email'])){
+                $this->view->email_error = 'Invalid Email';
+            } else{
+                var_dump($_POST);
+            }
+            if(empty($_POST['password'])){
+                $this->view->pass_error = 'Invalid Password';
+            }else{
+                var_dump($_POST);
+            }
         }
+        $this->view->render("register");
+
     }
 
     public function login() {
-        if (!$_POST) {
-            $this->view->render("login", true);
-        } else {
-            print_r($_POST);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if(empty($_POST['email'])){
+                $this->view->email_error = 'Invalid Email';
+            } else{
+                var_dump($_POST);
+            }
+            if(empty($_POST['password'])){
+                $this->view->pass_error = 'Invalid Password';
+            }else{
+                var_dump($_POST);
+            }
         }
+        $this->view->render("login");
     }
 }

@@ -3,13 +3,12 @@
 namespace System;
 class View
 {
-    public function render ($file_name, $layout = false) {
+    function __get($name) {
+        return null;
+    }
+    public function render ($file_name, $layout = true) {
         if(file_exists("Views" . DIRECTORY_SEPARATOR . $file_name.".php")){
-            if(!$layout) {
-                include 'Views' . DIRECTORY_SEPARATOR . $file_name.'.php';
-//                echo "Layouts doesn't exist";
-            }
-            else{
+            if($layout) {
                 if(file_exists('Views' . DIRECTORY_SEPARATOR . 'layout'. DIRECTORY_SEPARATOR . 'header.php') && file_exists('Views' . DIRECTORY_SEPARATOR . 'layout'. DIRECTORY_SEPARATOR . 'footer.php')){
                     include 'Views' . DIRECTORY_SEPARATOR . 'layout'. DIRECTORY_SEPARATOR . 'header.php';
                     include 'Views' . DIRECTORY_SEPARATOR . $file_name.'.php';
@@ -18,6 +17,9 @@ class View
                 else{
                     echo "Header and footer doesn't exist";
                 }
+            }
+            else{
+                include 'Views' . DIRECTORY_SEPARATOR . $file_name.'.php';
             }
         }
         else{

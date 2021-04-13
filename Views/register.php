@@ -5,10 +5,12 @@
             <div class="form-group">
                 <label for="email">Email address</label>
                 <input type="email" class="form-control" id="email" name = "email" placeholder="Enter email">
+                <p><?=$this->email_error?></p>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" class="form-control" id="password" name = "password">
+                <p><?=$this->pass_error ?></p>
             </div>
             <div class = "d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary mt-3">Register</button>
