@@ -31,7 +31,6 @@ class Auth extends Controller {
                 $this->view->email_error = 'Invalid Email';
             } else{
                 var_dump($_POST);
-                header('Location:dashboard.php');
             }
             if(empty($_POST['password'])){
                 $this->view->pass_error = 'Invalid Password';
