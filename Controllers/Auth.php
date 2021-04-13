@@ -36,7 +36,6 @@ class Auth extends Controller {
                 $this->view->pass_error = 'Invalid Password';
             }else{
                 var_dump($_POST);
-                header('Location:dashboard.php');
             }
         }
         $this->view->render("login");
