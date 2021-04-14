@@ -3,7 +3,6 @@
 namespace System;
 class View
 {
-
     public function render ($file_name, $layout = true) {
         if(file_exists("Views" . DIRECTORY_SEPARATOR . $file_name.".php")){
             if($layout) {
@@ -23,10 +22,8 @@ class View
         else{
             echo "$file_name doesn't exist ";
         }
-
     }
     function __get($name) {
         return null;
     }
-
 }
