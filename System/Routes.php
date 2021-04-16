@@ -10,6 +10,13 @@
         } else {
             $ctrl_class = "Home";
         }
+        if ($ctrl_class === 'Public') {
+            $dir = implode(DIRECTORY_SEPARATOR, $path);
+            if (file_exists($dir)) {
+                echo file_get_contents($dir);
+                return;
+            }
+        }
         if (file_exists("Controllers" . DIRECTORY_SEPARATOR . $ctrl_class . ".php")) {
             $ctrl_class = "Controllers\\" . $ctrl_class;
             if (class_exists($ctrl_class)) {

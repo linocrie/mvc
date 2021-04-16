@@ -17,16 +17,15 @@ class Db extends \mysqli
     }
     public function select($sql, $all = true)
     {
-        $arr = [];
-        $result = parent::query($sql);
-        if(!$result->num_rows) return $arr;
-        while ($row = $result->fetch_assoc()) {
-            $arr[] = $row;
+        $result = $this->query($sql);
+        if(!$all) {
+            return $result->fetch_assoc();
         }
-        if ($all) {
-            return $arr;
+        $data = [];
+        while($row = $result->fetch_assoc()) {
+            $data[] = $row;
         }
-        return $arr[0];
+        return $data;
     }
     public function insert($tbl_name, $data)
     {
@@ -35,8 +34,7 @@ class Db extends \mysqli
             $data_val .= "'" . $this->real_escape_string(htmlspecialchars($value)) . "', ";
         }
         $data_val = substr($data_val, 0, -2);
-        $query = parent::query("INSERT INTO $tbl_name(" . implode(",", array_keys($data)) . ")
-        VALUES ($data_val)");
+        $query = parent::query("INSERT INTO $tbl_name(" . implode(",", array_keys($data)) . ") VALUES ($data_val)");
         return $query;
     }
     public function update($tbl_name, $fields, $where_condition)
@@ -47,10 +45,10 @@ class Db extends \mysqli
         }
         $set = substr($set, 0, -2);
         $where = '';
-        if ($this->where_condition) {
-            $where = " WHERE " . $this->where_condition;
+        if ($where_condition) {
+            $where = " WHERE " .$where_condition;
         }
-        $this->where_condition = '';
+        $where_condition = '';
         $query = "UPDATE " . $tbl_name . " SET " . $set . $where;
         $upd_res = parent::query($query);
         return $upd_res;

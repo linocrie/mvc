@@ -11,48 +11,52 @@ class Auth extends Controller {
     }
     public function register() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if(empty(htmlspecialchars($_POST['email'])) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || empty($_POST['password'])){
+            if(empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
                 $this->view->email_error = 'Invalid Email';
+            }
+            elseif (empty($_POST['password'])){
                 $this->view->pass_error = 'Invalid Password';
-            } else{
+            }
+            elseif (empty($_POST['name'])){
+                $this->view->name_error = 'Please type your name';
+            }
+
+            else{
                 $user = new User;
                 if($user->create($_POST)){
-                    header("Location: /account");
+                    header("Location: /auth/login");
                 }
                 else{
                     $this->view->create_error = 'Something went wrong';
                 }
             }
         }
-        $this->view->render("register");
+        $this->view->render("register",false);
     }
 
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if(empty(htmlspecialchars($_POST['email'])) && empty($_POST['password'])){
-
+            if(empty($_POST['email'])){
                 $this->view->email_error = 'Invalid Email';
+            }elseif (empty($_POST['password'])){
                 $this->view->pass_error = 'Invalid Password';
-            } else{
-                    $user = new User;
-                    $result = $user->login($_POST['email'],$_POST['password']);
-                    if(isset($result['id'])){
-                        session_start();
-                        $_SESSION['user_id'] = $result['id'];
-                        header("Location: /account");
-                    }
-                    else{
-                        $this->view->login_error = 'Something went wrong';
-                    }
-                }
+            }
+            else{
+                  $user = new User;
+                  $result = $user->login($_POST['email'],$_POST['password']);
+                  if(isset($result['id'])){
+                     $_SESSION['user_id'] = $result['id'];
+                      header("Location: /account");
+                  }
+                   else{
+                      $this->view->login_error = 'Something went wrong';
+                   }
+            }
         }
-        $this->view->render("login");
+        $this->view->render("login",false);
     }
-
     public function logout() {
-        session_start();
-        unset($_SESSION['user_id']);
         session_destroy();
-        header("Location: login");
+        header("Location: /auth/login");
     }
 }

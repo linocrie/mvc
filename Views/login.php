@@ -1,5 +1,13 @@
-<div class = "container">
-    <div class="col-md-6 offset-md-3 bg-light border border-secondary rounded mt-5">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title></title>
+</head>
+<body>
+    <div class = "container">
+    <div class="col-md-6 offset-md-3  mt-5">
         <h2 class="d-flex justify-content-center mt-2">Login</h2>
         <form class = "m-5" action = "/auth/login" method = "POST">
             <p class="text-danger text-center"><?=$this->login_error?></p>
@@ -14,8 +22,9 @@
                 <p><?=$this->pass_error ?></p>
             </div>
             <div class = "d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary mt-3">Login</button>
+                <button type="submit" class="btn btn-dark mt-3">Login</button>
             </div>
         </form>
     </div>
 </div>
+</body>
