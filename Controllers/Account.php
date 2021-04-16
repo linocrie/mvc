@@ -25,7 +25,6 @@ class Account extends Controller{
         $user_id = $_GET['user_id'];
         $avatar = $this->user->uploadAvatar($user_id, $_FILES['avatar']);
         echo $avatar;
-//        echo $user_id;
     }
 }
 

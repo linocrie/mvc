@@ -1,12 +1,11 @@
 
 
 $('#myAvatar').on('change', function (e) {
-    if (!$(this).val().length) return false;
-    let url = $(this).parents('form').attr('action');
-    let method = $(this).parents('form').attr('method');
-    // console.log($(this).val())
+    if (!(this).val().length) return false;
+    let url = (this).parents('form').attr('action');
+    let method = (this).parents('form').attr('method');
     let formData = new FormData;
-    formData.append('avatar', $(this).prop('files')[0]);
+    formData.append('avatar', (this).prop('files')[0]);
     $.ajax({
         url: url,
         method: method,
