@@ -17,12 +17,16 @@ class User extends Model
         $password = md5($password);
         return $this->db->select("SELECT id FROM users WHERE email = '$email' AND password = '$password'", false);
     }
-    public function uploadAvatar($id, $file) {
-        $uploadFile = $this->upload($file);
-        if ($uploadFile) {
-            $this->db->update('users', ['user_avatar' => $file['name']], 'id = '.$id);
-            return $uploadFile;
-        }
-        return false;
+    public function user_info($id) {
+        return $this->db->select("SELECT name, user_avatar FROM users WHERE id = $id", true);
+    }
+    public function update_file($file, $id) {
+        $avatar = [
+            "user_avatar" => $file,
+        ];
+        return $this->db->where('id', $id)->update("users", $avatar);
+    }
+    public function get_all_friends($id) {
+        return $this->db->select("SELECT * FROM users WHERE NOT id = $id");
     }
 }

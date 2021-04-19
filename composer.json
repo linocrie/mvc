@@ -1,0 +1,13 @@
+{
+    "name": "user/mvc",
+    "description": "asd",
+    "authors": [
+        {
+            "name": "linocrie",
+            "email": "zaqaryanliana14@gmail.com"
+        }
+    ],
+    "require": {
+        "robmorgan/phinx": "^0.12.6"
+    }
+}

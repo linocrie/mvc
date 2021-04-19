@@ -10,13 +10,14 @@
 
 <body>
 
-<div class = "container">
-    <nav class="navbar navbar-light d-flex justify-content-between" ">
-        <nav class="navbar">
-            <a class="navbar-brand" href="#">
-                <img src="/Public/Images/logo.png" alt="logo" style="width: 50px">
-            </a>
-        </nav>
-        <a href = "/auth/logout" class="btn btn-dark w-20 mt-4 mb-4">Logout</a>
+<div class="container">
+    <nav class="navbar navbar-light d-flex justify-content-between">
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            <img src="/Public/Images/logo.png" alt="logo" style="width: 50px">
+        </a>
+        <a href="/account/friends" class="text-dark ml-5 bold font-weight-bold w-20 mt-4 mb-4">Friends</a>
+    </nav>
+        <a href="/auth/logout" class="btn btn-dark w-20 mt-4 mb-4">Logout</a>
     </nav>
 </div>

@@ -3,28 +3,46 @@
 namespace Controllers;
 use System\Controller;
 use Models\User;
+use Helpers\Upload;
 
 class Account extends Controller{
     public function __construct() {
-        $this->user = new User;
         if (!isset($_SESSION["user_id"])) {
             header('Location: /auth/login');
-            exit;
         }
         parent::__construct();
     }
     public function index() {
-        $get_user = $this->user->getUser($_SESSION['user_id']);
-        $this->view->id = $get_user['id'];
-        $this->view->name = $get_user['name'];
-        $this->view->user_avatar = $get_user['user_avatar'];
+        $user = new User;
+        if($_SERVER['REQUEST_METHOD'] == "POST") {
+            $upload = new Upload;
+            $target_dir = "./Public/Images/".$_FILES['avatar']['name'];
+            $result =$upload->execute($_FILES, $target_dir);
+            if(!$result) {
+                $this->view->error_msg = 'Error';
+            }
+        }
+        $userInfo = $user->user_info($_SESSION['user_id']);
+        $this->view->id = $_SESSION['user_id'];
+        $this->view->userInfo = $userInfo[0];
         $this->view->render("account");
     }
-
     public function upload_avatar() {
-        $user_id = $_GET['user_id'];
-        $avatar = $this->user->uploadAvatar($user_id, $_FILES['avatar']);
-        echo $avatar;
+        $upload = new Upload();
+        if ($upload->execute($_FILES, '')) {
+            header('location:/account');
+        }
+    }
+    public function friends() {
+        $user = new User;
+        $this->view->friends =  $user->get_all_friends($_SESSION["user_id"]);
+        $this->view->render("friends");
+    }
+    public function user($id) {
+        $user = new User;
+        $this->view->userInfo = $user->user_info($id)[0];
+        $this->view->friends_account = true;
+        $this->view->render("account");
     }
 }
 
