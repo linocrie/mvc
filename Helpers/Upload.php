@@ -1,36 +1,41 @@
 <?php
 
 namespace Helpers;
-use Models\User;
 
 class Upload {
-    private $allowed_file_types = array('jpg','jpeg','png','gif');
-    private $allowed_size =  5;
-    public $error_msg ;
-    public function execute ($file , $location){
+    public $options = [
+        "allowed_types" => ["jpg", "png", "jpeg", "gif"],
+        "allowed_size" => 5,
+        "change_name" => false
+    ];
+    public $error_msg;
+    public function execute ($file , $target_dir){
         $upload = true;
-        $file_type = strtolower(pathinfo($file['avatar']['name'],PATHINFO_EXTENSION));
-        $file_size = getimagesize($file['avatar']["tmp_name"]);
-        $file_name= date("H-i-s"). "." . $file_type;
-        $target_dir = "./Public/Images/".$file_name;
-        if($file_size == false){
-            $this->error_msg = "Such a big size pic";
+        $file_type = strtolower(pathinfo($file["name"],PATHINFO_EXTENSION));
+        $file_size = getimagesize($file["tmp_name"]);
+        if(!$file_size){
+            $this->error_msg = "Other type of file";
             $upload = false;
         }
-        if($file_type != $this->allowed_file_types[0] && $file_type != $this->allowed_file_types[1] && $file_type != $this->allowed_file_types[2] && $file_type != $this->allowed_file_types[3]){
+        if($file_type != $this->options["allowed_types"][0] && $file_type != $this->options["allowed_types"][1] && $file_type != $this->options["allowed_types"][2] &&  $file_type != $this->options["allowed_types"][3] &&  $file_type != $this->options["allowed_types"][4]){
             $this->error_msg = "Choose right type of image";
             $upload = false;
         }
-        if($file['avatar']['size'] > $this->allowed_size * 1000000){
+        if($file['size'] > $this->options["allowed_size"] * 1000000){
             $this->error_msg = "Such a large size pic";
             $upload = false;
         }
-        if($upload){
-            if(move_uploaded_file($file["avatar"]["tmp_name"], SITE_ROOT.$target_dir)){
-                $user = new User;
-                return $user->update_file($file_name, $_SESSION['user_id']);
+        if($upload) {
+            if(move_uploaded_file($file["tmp_name"],  $target_dir)) {
+                return $upload;
+            }
+            else {
+                $upload = false;
+                $this->error_msg = "Error";
             }
         }
         return $upload;
     }
 }
+
+//uploasic helnum a avatari pahy accountum ......file_name-y

@@ -6,32 +6,35 @@ use Models\User;
 use Helpers\Upload;
 
 class Account extends Controller{
+    private $user;
     public function __construct() {
         if (!isset($_SESSION["user_id"])) {
             header('Location: /auth/login');
         }
         parent::__construct();
+        $this->user = new User;
     }
     public function index() {
-        $user = new User;
         if($_SERVER['REQUEST_METHOD'] == "POST") {
             $upload = new Upload;
-            $target_dir = "./Public/Images/".$_FILES['avatar']['name'];
-            $result =$upload->execute($_FILES, $target_dir);
-            if(!$result) {
-                $this->view->error_msg = 'Error';
+            $file_type = strtolower(pathinfo($_FILES["avatar"]["name"], PATHINFO_EXTENSION));
+            $upload->options["change_name"] = true;
+            if($upload->options["change_name"]){
+                $file_name= date("H-i-s"). "." . $file_type;
+            }else{
+                $file_name= $_FILES["avatar"]["name"];
+            }
+            $target_dir = "./Public/Images/".$file_name;
+            $result =$upload->execute($_FILES['avatar'], $target_dir);
+            if($result) {
+                $this->user->update_file($file_name, $_SESSION['user_id']);
+
+            }else{
+                $this->view->error = $upload->error_msg;
             }
         }
-        $userInfo = $user->user_info($_SESSION['user_id']);
-        $this->view->id = $_SESSION['user_id'];
-        $this->view->userInfo = $userInfo[0];
+        $this->view->userInfo = $this->user->getUser($_SESSION['user_id']);
         $this->view->render("account");
-    }
-    public function upload_avatar() {
-        $upload = new Upload();
-        if ($upload->execute($_FILES, '')) {
-            header('location:/account');
-        }
     }
     public function friends() {
         $user = new User;
@@ -40,9 +43,18 @@ class Account extends Controller{
     }
     public function user($id) {
         $user = new User;
-        $this->view->userInfo = $user->user_info($id)[0];
-        $this->view->friends_account = true;
+        $this->view->userInfo = $user->getUser($id);
         $this->view->render("account");
+    }
+    public function chat() {
+        $user = new User;
+        $from_id = $_GET['user_id'];
+
+        $this->view->userInfo = $user->getUser($_SESSION['user_id']);
+        $this->view->toUserInfo = $user->getUser($from_id );
+        $this->view->chat = $user->get_chat($from_id, $_SESSION['user_id']);
+
+        $this->view->render("chat");
     }
 }
 

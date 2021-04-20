@@ -19,8 +19,7 @@ class Db extends \mysqli
     {
         $query_select = $this->query($sql);
         if(!$all) {
-           $row = $query_select->fetch_assoc();
-           return $row;
+            return $query_select->fetch_assoc();
         }
         $data = [];
         while($row = $query_select->fetch_assoc()) {
@@ -38,23 +37,19 @@ class Db extends \mysqli
         $query = parent::query("INSERT INTO $tbl_name(" . implode(",", array_keys($data)) . ") VALUES ($data_val)");
         return $query;
     }
-    public function update($tbl_name, $fields, $where_condition = false)
+    public function update($tbl_name, $fields)
     {
         $set = '';
         foreach ($fields as $key => $value) {
             $set .= $key . "='" . $this->real_escape_string(htmlspecialchars($value)) . "', ";
         }
         $set = substr($set, 0, -2);
-        $where = '';
-        if ($where_condition) {
-            $where = $where_condition;
-        } elseif ($this->where_condition) {
-            $where = $this->where_condition;
-        }
-        $where_condition = '';
+        $where = $this->where_condition;
+        $this->where_condition = '';
+
         $query = "UPDATE " . $tbl_name . " SET " . $set . $where;
-        $upd_res = parent::query($query);
-        return $upd_res;
+
+        return $this->query($query);
     }
     public function delete($tbl_name, $where_condition)
     {
@@ -72,7 +67,7 @@ class Db extends \mysqli
         if ($this->where_condition) {
             $this->where_condition .= " AND $column $oper $value ";
         } else {
-            $this->where_condition = " WHERE $column $oper $value ";
+            $this->where_condition .= " WHERE $column $oper $value ";
         }
         return $this;
     }

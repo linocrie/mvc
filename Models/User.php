@@ -10,15 +10,12 @@ class User extends Model
         return $this->db->insert('users',$data);
     }
     public function getUser($id) {
-        return $this->db->select('SELECT id,name,email,user_avatar FROM users WHERE id ='.$id, false);
+        return $this->db->select("SELECT id,name,user_avatar FROM users WHERE id =$id", false);
     }
     public function login($email, $password)
     {
         $password = md5($password);
         return $this->db->select("SELECT id FROM users WHERE email = '$email' AND password = '$password'", false);
-    }
-    public function user_info($id) {
-        return $this->db->select("SELECT name, user_avatar FROM users WHERE id = $id", true);
     }
     public function update_file($file, $id) {
         $avatar = [
@@ -27,6 +24,9 @@ class User extends Model
         return $this->db->where('id', $id)->update("users", $avatar);
     }
     public function get_all_friends($id) {
-        return $this->db->select("SELECT * FROM users WHERE NOT id = $id");
+        return $this->db->select("SELECT id,name,user_avatar FROM users WHERE id != $id");
+    }
+    public function get_chat($from_id, $to_id) {
+        return $this->db->select("SELECT from_id, body, date FROM messages WHERE from_id = $from_id AND to_id = $to_id OR from_id = $to_id AND to_id = $from_id");
     }
 }
