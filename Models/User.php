@@ -27,6 +27,6 @@ class User extends Model
         return $this->db->select("SELECT id,name,user_avatar FROM users WHERE id != $id");
     }
     public function get_chat($from_id, $to_id) {
-        return $this->db->select("SELECT from_id, body, date FROM messages WHERE from_id = $from_id AND to_id = $to_id OR from_id = $to_id AND to_id = $from_id");
+        return $this->db->select("SELECT from_id, body, date FROM messages LEFT JOIN users ON (messages.from_id = users.id) WHERE (from_id = $from_id AND to_id = $to_id) OR (from_id = $to_id AND to_id = $from_id)");
     }
 }

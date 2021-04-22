@@ -22,9 +22,9 @@ class Db extends \mysqli
             return $query_select->fetch_assoc();
         }
         $data = [];
-        while($row = $query_select->fetch_assoc()) {
-            $data[] = $row;
-        }
+            while($row = $query_select->fetch_assoc()) {
+                $data[] = $row;
+            }
         return $data;
     }
     public function insert($tbl_name, $data)

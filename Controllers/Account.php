@@ -41,6 +41,7 @@ class Account extends Controller{
         $this->view->friends =  $user->get_all_friends($_SESSION["user_id"]);
         $this->view->render("friends");
     }
+
     public function user($id) {
         $user = new User;
         $this->view->userInfo = $user->getUser($id);
@@ -49,12 +50,25 @@ class Account extends Controller{
     public function chat() {
         $user = new User;
         $from_id = $_GET['user_id'];
-
         $this->view->userInfo = $user->getUser($_SESSION['user_id']);
         $this->view->toUserInfo = $user->getUser($from_id );
         $this->view->chat = $user->get_chat($from_id, $_SESSION['user_id']);
 
         $this->view->render("chat");
     }
+    public function get_msg() {
+        if(isset($_POST['chat'])) {
+            $data = [
+                "body" => $_POST['chat'],
+                "from_id" => $_SESSION['user_id'],
+                "to_id" => $_GET['id'],
+            ];
+            $this->user->db->insert("messages", $data);
+            $this->view->get_last_msg = $this->user->get_chat($_SESSION['user_id'], $_GET['id']);
+            echo json_encode(end($this->view->get_last_msg));
+        }
+    }
 }
+
+
 
