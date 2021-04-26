@@ -1,42 +1,43 @@
 <div class="container">
     <div class="container d-flex justify-content-center">
-        <div class="card mt-5 chat-card" style="min-width: 500px; background-color: black">
+        <div class="card chat-card" style="min-width: 350px; background-color: black">
             <div class="d-flex bg-dark text-light flex-row justify-content-between  p-3"> <h4 class="pb-3"><?=$this->toUserInfo['name']?></h4><span>Active now</span></div>
-            <div id="chatList" class="chat-list">
+            <div id="chatList" class="chat-list d-flex flex-column">
                 <?php foreach ($this->chat as $msg) { ?>
-                    <div class="d-flex m-3 bg-dark text-light flex-row p-2 <?php if($msg['from_id'] === $this->userInfo['id']) echo 'my-msg ' ?>">
-                        <div class="avatar overflow-hidden rounded-circle" style="width: 40px;height: 40px;">
-                            <?php if($msg['from_id'] === $this->userInfo['id']) { ?>
-                                <img src="/Public/Images/<?= $this->userInfo['user_avatar'] ?>" class="img-fluid h-100" style="object-fit: cover;">
-                            <?php } else { ?>
-                                <img src="/Public/Images/<?= $this->toUserInfo['user_avatar'] ?>" class="img-fluid">
-                            <?php } ?>
+                    <?php if ($msg['from_id'] === $this->userInfo['id']) { ?>
+                        <div class="mr-3">
+                            <span class="text-secondary float-right " style="font-size: 15px"><?= $this->userInfo['name'] ?></span>
                         </div>
-                        <div class="chat ml-2 flex-grow-1" style="margin-right: 8px;">
-                            <p class="mb-0">
-                                <?php if($msg['from_id'] === $this->userInfo['id']) { ?>
-                                    <span class="text-secondary" style="font-size: 15px"><?= $this->userInfo['name'] ?></span>
-
-                                <?php } else { ?>
-                                    <span class="text-secondary" style="font-size: 15px"><?= $this->toUserInfo['name'] ?></span>
-                                <?php } ?>
-                            </p>
-                            <p class="mb-0" style="font-size: 20px"><?= $msg['body'] ?></p>
-                            <p class="date text-secondary mb-0" style="font-size: 12px;"><?= $msg['date'] ?></p>
+                        <div class="msg-part mr-3 msgItem" data-id="<?= $msg['id'] ?>">
+                            <p class="mb-0 float-right bg-light" style="font-size: 20px; padding: 0 15px 5px 15px;border-radius: 25px;"><?= $msg['body'] ?></p>
                         </div>
-                    </div>
+                        <div class="mr-3">
+                            <span class="mb-1 text-secondary float-right" style="font-size: 10px"><?= substr($msg["date"], 11, -3) ?></span>
+                        </div>
+                    <?php } else { ?>
+                        <span class="text-secondary text ml-3 mt-3 "
+                              style="font-size: 15px"><?= $this->toUserInfo['name'] ?></span>
+                        <div class="msg-part ml-3 msgItem" data-id="<?= $msg['id'] ?>">
+                            <p class="mb-0 float-left bg-light" style="font-size: 20px; padding: 0 15px 5px 15px;border-radius: 25px;"><?= $msg['body'] ?></p>
+                        </div>
+                        <span class=" ml-3 mb-1 text-secondary" style="font-size: 10px"><?= substr($msg["date"], 11, -3) ?></span>
+                    <?php } ?>
                 <?php } ?>
             </div>
-            <div class="d-flex flex-row p-2"> <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="30" height="30">
-                <div class="chat p-2 bg-dark"><span class="text-muted dot">. . .</span></div>
-            </div>
-            <form action="/account/get_msg/?id=<?=$this->toUserInfo['id']?>" method="POST" class="form-group chat-form align-items-center px-3 d-flex">
-                <textarea class="form-control" name="chat" id="text" placeholder="Type your message"></textarea>
-                <input type="submit" id="send" value="Send" class="ml-2 btn-dark"  style="width: 50px; height: 30px">
+            <form id="chatForm" method="POST" class="form-group chat-form align-items-center pt-3 px-3 d-flex">
+                <textarea class="form-control " name="chat" id="text" placeholder="Type your message"></textarea>
+                <button type="submit" id="send" class="ml-2 btn-dark" style="width: 60px; height: 30px">Send</button>
             </form>
         </div>
     </div>
 </div>
+<script>
+    let userId = <?=$this->userInfo['id']?>;
+    let userName = '<?=$this->userInfo['name']?>';
+    let toUserId = <?=$this->toUserInfo['id']?>;
+    let toUserName = '<?=$this->toUserInfo['name']?>';
+    let lastId = <?=$this->getLastMsg?>;
+</script>
 
 <style>
     .chat-card {
@@ -48,8 +49,5 @@
     }
     .my-msg {
         flex-direction: row-reverse !important;
-    }
-    .my-msg .chat {
-        text-align: right;
     }
 </style>
