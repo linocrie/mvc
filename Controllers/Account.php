@@ -61,12 +61,9 @@ class Account extends Controller
     public function chat($user_id)
     {
         $user = new User;
-        $from_id = $user_id;
         $this->view->userInfo = $user->getUser($_SESSION['user_id']);
-        $this->view->toUserInfo = $user->getUser($from_id);
-        $this->view->chat = $user->get_chat($from_id, $_SESSION['user_id']);
-        $msg = $this->user->get_last_id($_SESSION['user_id'], $user_id);
-        $this->view->getLastMsg = isset($msg[0]['id']) ? $msg[0]['id'] : 0;
+        $this->view->toUserInfo = $user->getUser($user_id);
+        $this->view->chat = $user->get_chat($_SESSION['user_id'],$user_id);
         $this->view->render("chat");
     }
 
@@ -82,20 +79,10 @@ class Account extends Controller
             echo json_encode($msg);
         }
     }
-
-    public function get_last_msg_id($user_id)
-    {
-        $user = new User;
-        $last_id = $user->get_last_id($_SESSION['user_id'], $user_id);
-        $response = count($last_id) ? $last_id[0]['id'] : 0;
-        echo json_encode($response, JSON_NUMERIC_CHECK);
+    public function get_msgs($to_id, $last_id) {
+        $last_msg = $this->user->get_chat($_SESSION['user_id'],$to_id, $last_id);
+        echo json_encode($last_msg);
     }
-    public function get_msgs_ajax($from_id,$last_id) {
-        $user = new User;
-        $chat = $user->get_new_msg($from_id, $_SESSION['user_id'], $last_id);
-        echo json_encode($chat);
-    }
-
 }
 
 

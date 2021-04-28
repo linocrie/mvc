@@ -29,13 +29,7 @@ class User extends Model
     public function create_msg($data) {
         return $this->db->insert("messages", $data);
     }
-    public function get_chat($from_id, $to_id) {
-        return $this->db->select("SELECT messages.id, messages.from_id, messages.body, date FROM messages LEFT JOIN users ON (messages.from_id = users.id) WHERE (from_id = $from_id AND to_id = $to_id) OR (from_id = $to_id AND to_id = $from_id) ORDER BY messages.id ASC");
-    }
-    public function get_last_id($from_id,$to_id) {
-        return $this->db->select("SELECT id FROM messages WHERE (from_id = $from_id AND to_id = $to_id) OR (from_id = $to_id AND to_id = $from_id) ORDER BY id DESC ");
-    }
-    public function get_new_msg($from_id, $to_id, $last_id) {
-        return $this->db->select("SELECT messages.id,users.name, messages.from_id, messages.body, date FROM messages LEFT JOIN users ON (messages.from_id = users.id) WHERE ((from_id = $from_id AND to_id = $to_id) OR (from_id = $to_id AND to_id = $from_id)) AND messages.id > $last_id ORDER BY messages.id ASC");
+    public function get_chat($from_id, $to_id, $last_id = 0) {
+        return $this->db->select("SELECT from_id, body, messages.id, users.name, date FROM messages LEFT JOIN users ON messages.from_id = users.id WHERE ((from_id = $from_id AND to_id = $to_id) OR (from_id = $to_id AND to_id = $from_id)) AND messages.id > $last_id ORDER BY messages.id");
     }
 }

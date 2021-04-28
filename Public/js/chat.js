@@ -2,11 +2,6 @@ $(document).ready(function () {
     if ($('#chatList').length) scrollToView();
 })
 
-$('#myAvatar').on('change', function (e) {
-    if (!$(this).val().length) return false;
-    $(this).parents('form').submit();
-})//sa kap chuni
-
 $("#chatForm").submit(function(event){
     event.preventDefault();
     let text = $('#text').val();
@@ -18,7 +13,7 @@ $("#chatForm").submit(function(event){
         data: {
             chat : text
         },
-        success(response) {
+        success: function (response) {
             $('#text').val('');
         }
     })
@@ -27,33 +22,20 @@ $('#text').on('keyup', function (e) {
     e.preventDefault();
     if (e.keyCode === 13) $("#chatForm").submit();
 })
+setInterval(get_msg,2000);
 
-function check_msg_id () {
+function get_msg() {
+    let url = `/account/get_msgs/${toUserId}/${lastId}`;
     $.ajax({
         type:'GET',
-        url: `/account/get_last_msg_id/${toUserId}`,
+        url: url,
         dataType: "json",
-        success: function(response){
-            if(response > lastId){
-                get_msgs();
-            }
-        }
-    })
-}
-setInterval(check_msg_id,500);
-
-function get_msgs() {
-    let last_id = $('.msgItem').last().data('id');
-    let url = `/account/get_msgs_ajax/${toUserId}/${last_id || lastId}`;
-    $.ajax({
-        type:'GET',
-        url,
-        dataType: "json",
-        success: function(response){
-            for (let i = 0; i < response.length; i++) {
-                printMsg(response[i])
-            }
+        success: function (response) {
+            if(!response.length) return;
             lastId = response[response.length - 1].id;
+            for (let i = 0; i < response.length; i++) {
+                    printMsg(response[i]);
+            }
         }
     })
 }
